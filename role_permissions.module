@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Shows how to alter permission to edit nodes by users based on role
+ * and whether the node is published or not.
+ */
+
+/**
+ * Implements hook_node_access().
+ *
+ * Remove ABC Role author's editing permission from published
+ * XYZ Content Type content.
+ *
+ * The ABC Role has permissions to create and edit their own
+ * XYZ Content Type content. However, once the XYZ Content Type
+ * content is published, the content author should not edit the content any
+ * more unless user has appropriate permissions to edit content.
+ *
+ * @Todo: This can be replaced by using the workbench_access module.
+ */
+function role_permissions_node_access(NodeInterface $node, $op, AccountInterface $account) {
+  if (User::load($account->id())->hasRole('abc_role')) {
+    $rmi = ($node->bundle() === 'xyz_content_type') ? TRUE : FALSE;
+    if ($rmi && $node->isPublished() && $op === 'update') {
+      $admin_content = ($account->hasPermission('administer nodes')) ? TRUE : FALSE;
+      $edit_any = ($account->hasPermission('edit any xyz_content_type content')) ? TRUE : FALSE;
+      if (!$admin_content && !$edit_any && $node->getOwner()->id() === $account->id()) {
+        return AccessResult::forbidden();
+      }
+    }
+  }
+
+  return AccessResult::neutral();
+}
