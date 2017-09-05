@@ -1,0 +1,83 @@
+{
+    "name": "drupal/drupal",
+    "description": "Drupal is an open source content management platform powering millions of websites and applications.",
+    "type": "project",
+    "license": "GPL-2.0+",
+    "require": {
+        "composer/installers": "^1.0.24",
+        "wikimedia/composer-merge-plugin": "~1.4",
+        "drupal/config_split": "^1.1",
+        "drupal/webform": "^5.0@beta",
+        "drupal/console": "~1.0",
+        "drupal/adminimal_theme": "^1.3",
+        "drupal/admin_toolbar": "^1.19",
+        "drupal/paragraphs": "1.x-dev",
+        "cweagans/composer-patches": "~1.0"
+    },
+    "replace": {
+        "drupal/core": "~8.3"
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "config": {
+        "preferred-install": "dist",
+        "autoloader-suffix": "Drupal8"
+    },
+    "extra": {
+        "patches": {
+            "drupal/paragraphs": {
+                "add_migration_destination": "https://www.drupal.org/files/issues/missing_migration-2644634-11_0.patch",
+                "paragraphs_migration_path": "https://www.drupal.org/files/issues/paragraphs-migration-path-2644634-4.patch"
+            }
+        },
+        "_readme": [
+            "Supports patches by requiring the patching tool for composer, cweagans/composer-patches",
+            "Applies patches to drupal/paragraphs by adding the patches section under the extra section",
+            "------------------------------",
+            "By default Drupal loads the autoloader from ./vendor/autoload.php.",
+            "To change the autoloader you can edit ./autoload.php.",
+            "This file specifies the packages.drupal.org repository.",
+            "You can read more about this composer repository at:",
+            "https://www.drupal.org/node/2718229"
+        ],
+        "merge-plugin": {
+            "include": [
+                "core/composer.json"
+            ],
+            "recurse": false,
+            "replace": false,
+            "merge-extra": false
+        },
+        "installer-paths": {
+            "core": ["type:drupal-core"],
+            "modules/contrib/{$name}": ["type:drupal-module"],
+            "profiles/contrib/{$name}": ["type:drupal-profile"],
+            "themes/contrib/{$name}": ["type:drupal-theme"],
+            "drush/contrib/{$name}": ["type:drupal-drush"],
+            "modules/custom/{$name}": ["type:drupal-custom-module"],
+            "themes/custom/{$name}": ["type:drupal-custom-theme"]
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Drupal\\Core\\Composer\\": "core/lib/Drupal/Core/Composer"
+        }
+    },
+    "scripts": {
+        "pre-autoload-dump": "Drupal\\Core\\Composer\\Composer::preAutoloadDump",
+        "post-autoload-dump": [
+          "Drupal\\Core\\Composer\\Composer::ensureHtaccess"
+        ],
+        "post-package-install": "Drupal\\Core\\Composer\\Composer::vendorTestCodeCleanup",
+        "post-package-update": "Drupal\\Core\\Composer\\Composer::vendorTestCodeCleanup"
+    },
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://packages.drupal.org/8"
+        }
+    ],
+    "require-dev": {
+        "drupal/devel": "^1.0"
+    }
+}
