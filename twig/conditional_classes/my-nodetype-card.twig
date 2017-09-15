@@ -1,0 +1,108 @@
+{{ attach_library('my_theme/my-nodetype-card') }}
+{% import '@my_theme/icons/icons.twig' as icons %}
+
+{% if attributes %}
+  {% set node_classes = node_classes|merge(['my-nodetype-card', 'my-nodetype-card__item']) %}
+
+  {% if image is empty %}
+    {% set node_classes = node_classes|merge(['text-card']) %}
+  {% endif %}
+
+  {% if new_flag is not empty %}
+    {% set node_classes = node_classes|merge(['new-card']) %}
+  {% endif %}
+
+  <article{{ attributes.addClass(card_classes, node_classes) }}>
+
+{% else %}
+
+    <article class="my-nodetype-card my-nodetype-card__item{% if image is empty %} text-card{% endif %}{% if new_flag is not empty %} new-card{% endif %}">
+
+{% endif %}
+
+  {% if my-nodetype_type %}
+
+    <div class="my-nodetype-card__my-nodetype-type">
+      {% if new_flag is not empty %}
+      <div class="my-nodetype-card__new-flag">New</div>
+      {% endif %}
+
+      <div class="my-nodetype-type">
+        {{ my-nodetype_type }}
+      </div>
+    </div>
+
+  {% else %}
+
+    {% if new_flag is not empty %}
+    <div class="my-nodetype-card__new-flag">New</div>
+    {% endif %}
+
+  {% endif %}
+
+  {% if image is not empty %}
+  <div class="my-nodetype-card__featured-image">
+    {{ image }}
+  </div>
+  {% endif %}
+
+  <div class="my-nodetype-card__content">
+    {% if attributes %}{{ title_prefix }}{% endif %}
+    <div class="my-nodetype-card--title">
+      <h2>{{ title }}</h2>
+    </div>
+    {% if attributes %}{{ title_suffix }}{% endif %}
+
+    {% if my-nodetype_date %}
+    <div class="my-nodetype-card--date">
+      {{ my-nodetype_date }}
+    </div>
+    {% endif %}
+
+    {% if my-nodetype_time %}
+    <div class="my-nodetype-card-time">
+      {{ my-nodetype_time }}
+    </div>
+    {% endif %}
+
+    {% if my-nodetype_location %}
+    <div class="my-nodetype-card-location">
+      {{ my-nodetype_location }}
+    </div>
+    {% endif %}
+
+    {% if description %}
+    <div class="my-nodetype-card--description">
+      {{ description }}
+    </div>
+    {% endif %}
+
+    {%
+      include "@my_theme/read-more-link/read-more-link.twig" with {
+        'link': link
+      } only
+    %}
+
+  </div>
+
+  <div class="my-nodetype-card--social">
+    {{ icons.get('icon-share-black') }}
+    <ul class="my-nodetype-card--social__menu">
+    <li class="my-nodetype-card--social__menu-item"><a class="my-nodetype-card--social__menu-email">{{ icons.get('icon-email') }}Email</a></li>
+    <li class="my-nodetype-card--social__menu-item"><a class="my-nodetype-card--social__menu-linkedin">{{ icons.get('linkedin') }}Share</a></li>
+      <li class="my-nodetype-card--social__menu-item"><a class="my-nodetype-card--social__menu-tweet">{{ icons.get('twitter') }}Tweet</a></li>
+      <li class="my-nodetype-card--social__menu-item"><a class="my-nodetype-card--social__menu-facebook">{{ icons.get('facebook') }}Post</a></li>
+    </ul>
+  </div>
+
+  {% if my-nodetype_audience %}
+  <div class="my-nodetype-card--audience">
+    <span class="audience-tab">{{ 'Audience'|t }}:</span>
+    <div class="audience-content">
+      {{ my-nodetype_audience }}
+    </div>
+  </div>
+  {% endif %}
+
+</article>
+
