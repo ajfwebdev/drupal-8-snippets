@@ -1,0 +1,106 @@
+<?php
+
+/**
+ * @file
+ * Renders custom field data for node view modes that include my_pseudo_field.
+ *
+ * In this example, the content type, my_content_type, has fields that are not
+ * included in any view mode because we want users to enter data in those fields
+ * but we need to manipulate the data and format it differently before
+ * rendering it to the page. In this case, the data is related to social media
+ * sharing, and it should be formatted into the url format required by each
+ * social media's sharing rules.
+ *
+ * The pseudo field we create with hook_entity_extra_field_info() will be
+ * included in the view displays for the content type. If it's present that
+ * means we will add our specially formatted social media links to the render
+ * array ($build array) for that page.
+ *
+ * In the hook_ENTITY_TYPE_view() function, there are examples of using the
+ * Entity API to get the data from our social media fields, which are not
+ * included in any view mode. The data from these fields is formatted into
+ * markup which includes a link to share the data on each social media instance,
+ * and added to the $build array for the page.
+ */
+
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Entity\Display\EntityViewDisplayInterface;
+
+/**
+ * Implements hook_entity_extra_field_info().
+ *
+ * Adds pseudo field to content type view mode configuration.
+ */
+function my_module_entity_extra_field_info() {
+  $extra = [];
+
+  $extra['node']['my_content_type']['display']['my_pseudo_field'] = [
+    'label' => t('Special Field'),
+    'description' => t('Special data here.'),
+    'weight' => 100,
+    'visible' => TRUE,
+  ];
+
+  return $extra;
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_view().
+ *
+ * Adding the my_pseudo_field render array to the node's render array.
+ */
+function my_module_node_view(array &$build, EntityInterface $entity, EntityViewDisplayInterface $display, $view_mode) {
+  if ($display->getComponent('my_pseudo_field')) {
+
+    // Check socialmedia1 share status and build render element.
+    $check_fields = $entity->hasField('field_enable_socialmedia1_share') && $entity->hasField('field_socialmedia1_share_title') && $entity->hasField('field_socialmedia1_share_summary') && $entity->hasField('field_socialmedia1_share_url');
+
+    if ($check_fields) {
+      // Note how the getValue method returns a field array which we must access via [0]['value'].
+      // There is another syntax: $entity->field_my_field->value; why not use that instead?
+      if ($entity->get('field_enable_socialmedia1_share')->getValue()[0]['value']) {
+        $socialmedia1_title = (!empty($entity->get('field_socialmedia1_share_title')->getValue())) ? $entity->get('field_socialmedia1_share_title')->getValue()[0]['value'] : NULL;
+        $socialmedia1_summary = (!empty($entity->get('field_socialmedia1_share_summary')->getValue())) ? $entity->get('field_socialmedia1_share_summary')->getValue()[0]['value'] : NULL;
+        $socialmedia1_url = (!empty($entity->get('field_socialmedia1_share_url')->getValue())) ? $entity->get('field_socialmedia1_share_url')->getValue()[0]['uri'] : NULL;
+
+        if (isset($socialmedia1_title) && isset($socialmedia1_summary) && isset($socialmedia1_url)) {
+          $socialmedia1_share = '<div><a target="_blank" href="https://www.socialmedia1.com/shareArticle?mini=true';
+          $socialmedia1_share .= '&url=' . urlencode($socialmedia1_url);
+          $socialmedia1_share .= '&title=' . urlencode($socialmedia1_title);
+          $socialmedia1_share .= '&summary=' . urlencode($socialmedia1_summary);
+          $socialmedia1_share .= '">' . t('Share') . '</a></div>';
+
+          $build['share_socialmedia1'] = [
+            '#type' => 'markup',
+            '#markup' => $socialmedia1_share,
+          ];
+        }
+      }
+    }
+
+    // Check socialmedia2 share status and build render element.
+    $check_fields = $entity->hasField('field_enable_socialmedia2_share') && $entity->hasField('field_socialmedia2_share_data_text');
+    if ($check_fields) {
+      if ($entity->get('field_enable_socialmedia2_share')->getValue()[0]['value']) {
+        $socialmedia2_data = (!empty($entity->get('field_socialmedia2_share_data_text')->getValue())) ? $entity->get('field_socialmedia2_share_data_text')->getValue()[0]['value'] : NULL;
+
+        if (isset($socialmedia2_data)) {
+          $socialmedia2_share = '<div><a target="_blank" href="https://socialmedia2.com/intent/data?';
+          $socialmedia2_share .= 'text=' . urlencode($socialmedia2_data);
+          $socialmedia2_share .= '">' . t('data') . '</a></div>';
+
+          $build['share_socialmedia2'] = [
+            '#type' => 'markup',
+            '#markup' => $socialmedia2_share,
+          ];
+        }
+      }
+    }
+  }
+
+  // What is this for?
+  if ($build) {
+
+  }
+}
+
