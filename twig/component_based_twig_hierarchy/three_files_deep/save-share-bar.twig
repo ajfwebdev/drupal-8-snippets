@@ -1,0 +1,63 @@
+{#
+/**
+ * @file
+ * Template for a save and share link items.
+ *
+ * Location:
+ * themes/custom/my-theme/src/components/save-share-bar/save-share-bar.twig
+ */
+#}
+
+{{ attach_library('my_theme/save-share-bar') }}
+{% import '@my_theme/icons/icons.twig' as icons %}
+
+{% if save_link or share_email or share_linkedin or share_twitter or share_facebook %}
+<div class="save-share-bar {{ modifier_class }}">
+  <div class="save-share-bar--tools">
+
+    {% if save_link is not empty %}
+    <div class="save-share-bar--save-link">
+      {{ save_link }}
+    </div>
+    {% endif %}
+
+    {% if share_email or share_linkedin or share_twitter or share_facebook %}
+    <span class="save-share-bar--share-link" role="button">{{ icons.get('icon-share-black') }}</span>
+    {% endif %}
+
+  </div>
+
+
+  {% if share_email or share_linkedin or share_twitter or share_facebook %}
+  <div class="save-share-bar--share">
+
+    {% if share_email %}
+    <div class="share-bar-link save-share-bar__share-link--email">
+      {{ share_email }}
+    </div>
+    {% endif %}
+
+    {% if share_linkedin %}
+    <div class="share-bar-link save-share-bar__share-link--linkedin">
+      {{ share_linkedin }}
+    </div>
+    {% endif %}
+
+    {% if share_twitter %}
+    <div class="share-bar-link save-share-bar__share-link--twitter">
+      {{ share_twitter }}
+    </div>
+    {% endif %}
+
+    {% if share_facebook %}
+    <div class="share-bar-link save-share-bar__share-link--facebook">
+      {{ share_facebook }}
+    </div>
+    {% endif %}
+
+  </div>
+  {% endif %}
+
+</div>
+{% endif %}
+

@@ -1,0 +1,62 @@
+{#
+/**
+ * @file
+ * Template for a single card item.
+ *
+ * Location:
+ * themes/custom/my-theme/src/components/content-cards/content-card.twig
+ */
+#}
+
+{{ attach_library('my_theme/content-cards') }}
+{% import '@my_theme/icons/icons.twig' as icons %}
+{%
+  set card_classes = [
+    'content-card',
+    image is empty ? 'text-card',
+    new_flag ? 'new-card'
+  ]
+%}
+{% if attributes %}
+  <article{{ attributes.addClass(card_classes, node_classes) }}>
+{% else %}
+  <article class="content-card {% if image is empty %} text-card{% endif %}{% if new_flag is not empty %} new-card{% endif %}">
+{% endif %}
+
+  {% if new_flag is not empty %}
+    <span class="content-card__new-flag">New</span>
+  {% endif %}
+
+  {% if image is not empty %}
+  <div class="content-card__featured-image">
+    {{ image }}
+  </div>
+  {% endif %}
+
+  <div class="content-card__content">
+    {% if attributes %}
+      {{ title_prefix }}
+    {% endif %}
+    <div class="content-card--title">{{ title }}</div>
+    {% if attributes %}
+      {{ title_suffix }}
+    {% endif %}
+    <div class="content-card--description">{{ description }}</div>
+
+    {%
+      include "@my_theme/read-more-link/read-more-link.twig" with {
+        'link': link
+      } only
+    %}
+
+    {% include "@my_theme/save-share-bar/save-share-bar.twig" with {
+        'save_link': save_link,
+        'share_email': share_email,
+        'share_linkedin': share_linkedin,
+        'share_twitter': share_twitter,
+        'share_facebook': share_facebook
+      } only
+    %}
+  </div>
+
+</article>
