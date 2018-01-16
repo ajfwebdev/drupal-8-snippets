@@ -1,0 +1,51 @@
+<?php
+
+/**
+ * @file
+ * Example of an install file with useful functions for an install profile.
+ */
+
+use Drupal\user\Entity\User;
+use Drupal\user\RoleInterface;
+use Drupal\shortcut\Entity\Shortcut;
+use Symfony\Component\Yaml\Yaml;
+
+/**
+ * Implements hook_install().
+ *
+ * Perform actions to set up the site for this profile.
+ *
+ * @see system_install()
+ */
+function myprofile_install() {
+  // Set front page to "node".
+  \Drupal::configFactory()
+    ->getEditable('system.site')
+    ->set('page.front', '/node')
+    ->save(TRUE);
+
+  // Assign user 1 the "administrator" role.
+  $user = User::load(1);
+  $user->roles[] = 'administrator';
+  $user->save();
+}
+
+
+/**
+ * Updates config that has changed in this profile.
+ */
+function myprofile_update_8001() {
+  $profile_path = drupal_get_path('profile', 'myprofile');
+  $config_dir = $profile_path . '/config/install/';
+  // Omit .yml file extension, so we can get config object by name below.
+  $configs = [
+    'core.entity_view_display.node.my_page.teaser',
+    'core.entity_view_display.node.my_page.default',
+  ];
+  foreach ($configs as $config) {
+    $config_path = $config_dir . $config . '.yml';
+    $data = Yaml::parse(file_get_contents($config_path));
+    $config_obj = \Drupal::configFactory()->getEditable($config);
+    $config_obj->setData($data)->save(TRUE);
+  }
+}
