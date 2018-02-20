@@ -1,0 +1,16 @@
+{#
+/**
+ * @file
+ * To preserve cache tags in rendered output, embed the sub-template.
+ * Override a block in the sub-template called imageListBlock.
+ * Print the field, field_service_offered_by, in our overridden block.
+ * We would also create a custom field template to render the field content as required.
+ */
+ #}
+              {% if content.field_awesome_content %}
+                {% embed "@organisms/by-author/image-link-list.twig" %}
+                  {% block imageListBlock %}
+                    {{ content.field_service_offered_by }}
+                  {% endblock %}
+                {% endembed %}
+              {% endif %}

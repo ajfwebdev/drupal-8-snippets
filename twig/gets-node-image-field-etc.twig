@@ -1,0 +1,33 @@
+{#
+/**
+ * @file
+ * Display the Logo and Link view mode of content type.
+ *
+ * The actual filename for a custom view mode template would be like:
+ * node--my-content-type--my-mode.html.twig
+ * - where the node type machine name is 'my_content_type'.
+ * - and the view mode machine name is 'my_mode'.
+ *
+ * url - the url of the node is available as a variable.
+ * label - this is the node title (includes HTML markup).
+ * label|field_value - this gets just the title text.
+ * node.field_image.entity.fileuri - this gets the image file uri to use for src attribute.
+ */
+ #}
+{% set image = null %}
+{% if node.field_image is not empty %}
+  {% set image = {
+    'src': file_url(node.field_image.entity.fileuri),
+    'alt': node.field_image.alt
+  } %}
+{% endif %}
+{% include "@molecules/image-link.twig" with {
+    'imageLink': {
+      'block': null,
+      'href': url,
+      'info': label|field_value,
+      'image': image,
+      'text': label
+    }
+  }
+%}
