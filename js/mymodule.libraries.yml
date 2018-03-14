@@ -1,0 +1,6 @@
+my_js_lib:
+  version: 1.x
+  js:
+    js/show_hide.js: {}
+  dependencies:
+    - core/jquery
