@@ -1,0 +1,41 @@
+<div class="my-class-name">
+      {% embed "@organisms/my-organisms/my-section.twig" with {
+        'about': {
+          'title': {
+            'title': content.field_short_name
+          },
+          'content': {
+            'rteElements': {
+              'element_1': {
+                'path': "@atoms/my-atoms/paragraph.twig",
+                'data': {
+                  'paragraph': {
+                    'text': content.field_about_summary
+                  }
+                }
+              }
+            }
+          },
+          'link': {
+            'href': '#',
+            'text': 'Link text'
+          },
+          'person': {
+            'name': {
+              'title': personName
+            },
+            'title': {
+              'text': roleTitle
+            },
+            'image': {
+              'shape': 'circular',
+              'alt': content.field_bio_page[0]['#node'].field_profile_image.alt,
+              'src': content.field_bio_page[0]['#node'].field_profile_image.0.entity.url.value,
+              'height': content.field_bio_page[0]['#node'].field_profile_image.height,
+              'width': content.field_bio_page[0]['#node'].field_profile_image.width
+            }
+          }
+        }
+      } %}
+      {% endembed %}
+</div>
