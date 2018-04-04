@@ -1,4 +1,19 @@
 <div class="my-class-name">
+
+      {% set firstName = content.field_bio_page[0]['#node'].field_person_first_name[0].value %}
+      {% set lastName = content.field_bio_page[0]['#node'].field_person_last_name[0].value %}
+      {% set personName = firstName ~ " " ~ lastName %}
+
+      {% if content.field_bio_page[0]['#node'].field_person_about_link.target_id %}
+        {% set myPagePath = path('entity.node.canonical', {'node': content.field_bio_page[0]['#node'].field_person_about_link.target_id}) %}
+      {% else %}
+        {% set myPagePath = '' %}
+      {% endif %}
+
+      {% set shortNameArray = content.field_short_name|field_value %}
+      {% set shortName = shortNameArray[0]['#context'].value %}
+      {% set currentUrl = url('<current>') %}
+
       {% embed "@organisms/my-organisms/my-section.twig" with {
         'about': {
           'title': {
@@ -17,22 +32,26 @@
             }
           },
           'link': {
-            'href': '#',
-            'text': 'Link text'
+            'href': currentUrl['#markup'] ~ '/about',
+            'text': 'Read more about the ' ~ shortName
           },
           'person': {
             'name': {
               'title': personName
             },
             'title': {
-              'text': roleTitle
+              'text': content.field_bio_page[0]['#node'].field_person_role_title[0].value ? content.field_bio_page[0]['#node'].field_person_role_title[0].value : ''
             },
             'image': {
               'shape': 'circular',
-              'alt': content.field_bio_page[0]['#node'].field_profile_image.alt,
-              'src': content.field_bio_page[0]['#node'].field_profile_image.0.entity.url.value,
-              'height': content.field_bio_page[0]['#node'].field_profile_image.height,
-              'width': content.field_bio_page[0]['#node'].field_profile_image.width
+              'alt': content.field_bio_page[0]['#node'].field_person_profile_image.alt ? content.field_bio_page[0]['#node'].field_person_profile_image.alt : 'the state seal',
+              'src': content.field_bio_page[0]['#node'].field_person_profile_image.0.entity.url.value ? content.field_bio_page[0]['#node'].field_person_profile_image.0.entity.url.value : '/themes/custom/mass_theme/images/stateseal-color.png',
+              'height': content.field_bio_page[0]['#node'].field_person_profile_image.height ? content.field_bio_page[0]['#node'].field_person_profile_image.height : '235',
+              'width': content.field_bio_page[0]['#node'].field_person_profile_image.width ? content.field_bio_page[0]['#node'].field_person_profile_image.width : '235'
+            },
+            'bio': {
+              'href': myPagePath,
+              'text': content.field_bio_page[0]['#node'].field_person_about_link_title.value
             }
           }
         }
