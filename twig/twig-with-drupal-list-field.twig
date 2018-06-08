@@ -1,0 +1,18 @@
+{#
+/**
+ * @file
+ * In this example, the field field_contact_values_to_display, is a
+ * Drupal list field.
+ */
+ #}
+{% set to_show = paragraph.field_contact_values_to_display %}
+   ...
+    {% for to_show_item in to_show %}
+      {% if to_show_item.value == 'email' %}
+        {% if source == 'node' %}
+          {{ person.field_email }}
+        {% else %}
+          {{ contact.field_email }}
+        {% endif %}
+      {% endif %}
+    {% endfor %}
