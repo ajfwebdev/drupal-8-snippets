@@ -1,0 +1,31 @@
+<?php
+
+/**
+ * Implements hook_preprocess_node().
+ *
+ * This could be in a my_theme.theme file.
+ */
+function my_theme_preprocess_node(array &$variables) {
+  $node = $variables['node'];
+  switch ($node->getType()) {
+    case "landing_page":
+      $my_vocab_tid = $node->field_landing_topic_map->target_id;
+      if ($my_vocab_tid) {
+        $my_vocab_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($my_vocab_tid);
+        if (!$my_vocab_term->get('field_icon')->isEmpty()) {
+          $variables['icon'] = $my_vocab_term->get('field_icon')->entity->uri->value;
+        }
+      }
+    break;
+    case "other_page":
+    case "user_page":
+      $my_other_vocab_tid = $node->field_my_other_vocab->target_id;
+      if ($my_other_vocab_tid) {
+        $my_other_vocab_term = \Drupal::entityTypeManager()->getStorage('taxonomy_term')->load($my_other_vocab_tid);
+        if (!$my_other_vocab_term->get('field_icon')->isEmpty()) {
+          $variables['icon'] = $my_other_vocab_term->get('field_icon')->entity->uri->value;
+        }
+      }
+    break;
+  }
+}
