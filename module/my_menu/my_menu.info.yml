@@ -1,0 +1,5 @@
+name: 'My Menu'
+description: 'Menu customizations'
+type: module
+core: 8.x
+package: 'PWC Core'

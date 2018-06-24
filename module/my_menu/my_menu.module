@@ -1,0 +1,15 @@
+<?php
+
+/**
+ * @file
+ * Provides menu customizations.
+ */
+
+use Drupal\my_menu\MyMenuAccessControlHandler;
+
+/**
+ * Implements hook_entity_type_alter().
+ */
+function my_menu_entity_type_alter(array &$entity_types) {
+  $entity_types['menu']->setHandlerClass('access', MyMenuAccessControlHandler::class);
+}
