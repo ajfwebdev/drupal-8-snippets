@@ -1,0 +1,48 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for my_module.
+ */
+
+use Symfony\Component\Yaml\Yaml;
+use Drupal\user\Entity\Role;
+use Drupal\field\Entity\FieldStorageConfig;
+use Drupal\field\Entity\FieldConfig;
+
+/**
+ * Implements hook_update_dependencies().
+ */
+function my_module_update_dependencies() {
+  // Means my_other_module update 8110 should run before my_module update 8101.
+  $dependencies['my_module'][8101] = [
+    'my_other_module' => 8110,
+  ];
+  return $dependencies;
+}
+
+
+/**
+ * Installs a module and updates config for user roles and permissions.
+ */
+function my_module_update_8101() {
+
+  // Install rebuild_cache_access module.
+  \Drupal::service('module_installer')->install(['rebuild_cache_access']);
+
+  // Update permissions for Platform Administrator role.
+  $module_path = drupal_get_path('module', 'my_module');
+  $config_dir = $module_path . '/config/install/';
+
+  $configs = [
+    'user.role.my_role1',
+    'user.role.my_role2',
+  ];
+
+  foreach ($configs as $config) {
+    $config_path = $config_dir . $config . '.yml';
+    $data = Yaml::parse(file_get_contents($config_path));
+    $config_obj = \Drupal::configFactory()->getEditable($config);
+    $config_obj->setData($data)->save(TRUE);
+  }
+}
