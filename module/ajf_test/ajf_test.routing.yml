@@ -1,0 +1,7 @@
+jira_crunch.test:
+  path: '/admin/ajf-test'
+  defaults:
+    _controller: '\Drupal\ajf_test\Controller\TestController::test'
+    _title: 'AJF Test'
+  requirements:
+    _permission: 'administer site configuration'
