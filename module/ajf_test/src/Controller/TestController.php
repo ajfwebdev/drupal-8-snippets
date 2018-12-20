@@ -20,7 +20,7 @@ class TestController extends ControllerBase {
     $content = [];
     $message = '';
 
-    // Adds a conditional memory increase for the Ask OFRO vocab edit page.
+    // Adds a conditional memory increase.
     if (isset($_SERVER['REQUEST_URI']) && strpos($_SERVER['REQUEST_URI'], 'admin/ajf-test') !== false ) {
       ini_set('memory_limit', '128M');
       ini_set('max_input_vars', '4000');
