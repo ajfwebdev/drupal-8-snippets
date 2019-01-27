@@ -58,7 +58,7 @@ class ServiceClass  {
   protected $requestStack;
 
   /**
-   * Constructs a new MyClass object.
+   * Constructs a new ServiceClass object.
    */
   public function __construct(ConfigFactory $config_factory, Client $http_client, AccountProxy $account_proxy, Json $json, LoggerChannelFactory $logger_factory, RequestStack $request_stack) {
     $this->configFactory = $config_factory;
