@@ -1,7 +1,4 @@
 services:
-  dtc_plan_rate.api_client:
-    class: '\Drupal\dtc_plan_rate\ApiClient'
-    arguments: ['@dtc.token_manager', '@logger.factory', '@http_client', '@current_user', '@request_stack']
-  dtc_plan_rate.rating_service:
-    class: '\Drupal\dtc_plan_rate\RateController'
-    arguments: ['@dtc_plan_rate.api_client', '@dtc.token_manager', '@config.factory', '@http_client', '@current_user', '@serialization.json']
+  my_module.rating_service:
+    class: '\Drupal\my_module\MyService'
+    arguments: ['@config.factory', '@http_client', '@current_user', '@serialization.json', '@logger.factory', '@request_stack']

@@ -7,28 +7,13 @@ use Drupal\Core\Config\ConfigFactory;
 use Drupal\Component\Serialization\Json;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
-use Drupal\customer_authentication\Controller\TokenManager;
 use Drupal\Core\Logger\LoggerChannelFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * The MyClass class.
+ * The MyService class.
  */
-class MyClass  {
-
-  /**
-   * The ApiClient service.
-   *
-   * @var \Drupal\dtc_plan_rate\ApiClient
-   */
-  protected $ApiClient;
-
-  /**
-   * The TokenManager service.
-   *
-   * @var \Drupal\customer_authentication\Controller\TokenManager
-   */
-  protected $tokenManager;
+class MyService  {
 
   /**
    * The ConfigFactory service.
@@ -75,9 +60,7 @@ class MyClass  {
   /**
    * Constructs a new MyClass object.
    */
-  public function __construct(ApiClient $api_client, TokenManager $token_manager, ConfigFactory $config_factory, Client $http_client, AccountProxy $account_proxy, Json $json, LoggerChannelFactory $logger_factory, RequestStack $request_stack) {
-    $this->ApiClient = $api_client;
-    $this->tokenManager = $token_manager;
+  public function __construct(ConfigFactory $config_factory, Client $http_client, AccountProxy $account_proxy, Json $json, LoggerChannelFactory $logger_factory, RequestStack $request_stack) {
     $this->configFactory = $config_factory;
     $this->httpClient = $http_client;
     $this->currentUser = $account_proxy;
