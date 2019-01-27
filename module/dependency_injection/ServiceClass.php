@@ -11,9 +11,9 @@ use Drupal\Core\Logger\LoggerChannelFactory;
 use Symfony\Component\HttpFoundation\RequestStack;
 
 /**
- * The MyService class.
+ * The ServiceClass class.
  */
-class MyService  {
+class ServiceClass  {
 
   /**
    * The ConfigFactory service.
