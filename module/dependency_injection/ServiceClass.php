@@ -84,9 +84,6 @@ class ServiceClass  {
     $config->set('my_module.mySetting', 'my new value');
     $config->save();
 
-    // Get access token.
-    $token = $this->tokenManager->getAccessToken();
-
     // Example variables for use with httpClient, loggerFactory.
     $method = 'GET';
     $url = 'https://example.com';
