@@ -1,0 +1,16 @@
+<?php
+
+
+/**
+ * Implements hook_preprocess_paragraph().
+ *
+ * Customize banner_image paragraph type variables for theming.
+ */
+function dixon_preprocess_paragraph__banner_image(&$variables) {
+  $paragraph = $variables['paragraph'];
+  $referenced_entities = $paragraph->get('field_text_alignment')->referencedEntities();
+  foreach ($referenced_entities as $term) {
+    $variables['text_alignment'] = $term->get('field_class_name')->value;
+  }
+
+}
